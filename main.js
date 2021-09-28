@@ -1,6 +1,7 @@
-let pageX, pageY, appleTransition, inAction = false, gaming = true;
+let pageX, pageY, appleTransition, inAction = false, gaming = true, scoreGame = 0;
 pageY = window.innerHeight;
 pageX = window.innerWidth;
+const score = document.querySelector(".score");
 const player = document.querySelector(".player");
 const arrow = document.querySelector(".arrow");
 const apple = document.querySelector(".apple");
@@ -23,7 +24,7 @@ function shot(position) {
 }
 
 function spawnEnemy() {
-    gaming = true;
+    if (!gaming) gaming = true;
     apple.classList.add("transition");
     apple.classList.remove("hide");
     apple.style.top = `${Math.random() * (pageY - apple.offsetHeight) | 0}px`;
@@ -36,6 +37,9 @@ function spawnEnemy() {
     let obj2 = apple.getBoundingClientRect();
     if (obj1.left < obj2.left + obj2.width && obj1.left + obj1.width > obj2.left &&
         obj1.top < obj2.top + obj2.height && obj1.top + obj1.height > obj2.top) {
+        if (!gaming) return;
+        scoreGame++;
+        score.innerText = scoreGame;
         apple.style.top = `${obj2.top}px`;
         apple.style.left = `${obj2.left}px`;
         explode(obj2.left + (obj2.width / 2), obj2.top + (obj2.height / 2));
@@ -54,7 +58,6 @@ spawnEnemy();
 // click event listener
 $('body').on('click', function (e) {
     const posY = (e.pageY / (pageY / 100));
-    console.log(posY);
     shot(posY);
 })
 

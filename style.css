@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 *, *::before, *::after {
     padding: 0;
     margin: 0;
@@ -11,6 +12,9 @@ html, body {
 }
 
 body {
+    color: rgb(0, 170, 23);
+    font-size: 1rem;
+    font-family: 'Press Start 2P', cursive;
     background-color: rgb(39, 39, 39);
 }
 
@@ -26,10 +30,24 @@ body {
     visibility: hidden;
 }
 
+.score {
+    margin: auto;
+    top: 10px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    width: 100px;
+}
+
+.score::before {
+    content: "Score:";
+    margin-right: 10px;
+}
+
 .player {
     height: 30px;
     width: 10px;
-    background-color: blueviolet;
+    background-color: rgb(159, 69, 243);
 }
 
 .arrow {
@@ -40,7 +58,7 @@ body {
     bottom: 0;
     margin-top: auto;
     margin-bottom: auto;
-    background-color: chartreuse;
+    background-color: rgb(141, 255, 28);
 }
 
 .apple {

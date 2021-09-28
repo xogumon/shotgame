@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background-color: rgb(39, 39, 39);
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .transition {
+            transition: all 4s linear;
+        }
+
+        .hide {
+            visibility: hidden;
+        }
+
+        .player {
+            height: 30px;
+            width: 10px;
+            background-color: blueviolet;
+        }
+
+        .arrow {
+            height: 2px;
+            width: 10px;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            margin-top: auto;
+            margin-bottom: auto;
+            background-color: chartreuse;
+        }
+
+        .apple {
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background-image: url(apple.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="player position-absolute">
+        <div class="arrow position-absolute"></div>
+    </div>
+    <div class="apple position-absolute hide transition" style="transition-timing-function: ease;"></div>
+
+    <script>
+        let pageX, pageY, appleTransition, inAction = false, gaming = true;
+        pageY = window.innerHeight;
+        pageX = window.innerWidth;
+        const player = document.querySelector(".player");
+        const arrow = document.querySelector(".arrow");
+        const apple = document.querySelector(".apple");
+        function shot(position) {
+            if (inAction || !gaming) return;
+            inAction = true;
+            player.style.top = `${((pageY - player.offsetHeight) / 100) * position}px`;
+            arrow.classList.add("transition");
+            arrow.style.transitionDuration = "1s";
+            arrow.style.left = `${pageX}px`;
+            arrow.ontransitionend = () => {
+                arrow.classList.remove("transition");
+                arrow.style.transitionDuration = "0ms";
+                setTimeout(() => {
+                    arrow.style.left = "0px";
+                    inAction = false;
+                }, 1000);
+            };
+        }
+        function spawnEnemy() {
+            gaming = true;
+            apple.classList.add("transition");
+            apple.classList.remove("hide");
+            apple.style.top = `${Math.random() * (pageY - apple.offsetHeight) | 0}px`;
+            apple.style.right = `${Math.random() * (pageX / 4) | 0}px`;
+            appleTransition = setTimeout(spawnEnemy, 2000);
+        }
+        (function collisionDetection() {
+            let obj1 = arrow.getBoundingClientRect();
+            let obj2 = apple.getBoundingClientRect();
+            if (obj1.left < obj2.left + obj2.width && obj1.left + obj1.width > obj2.left &&
+                obj1.top < obj2.top + obj2.height && obj1.top + obj1.height > obj2.top) {
+                apple.style.top = `${obj2.top}px`;
+                apple.style.left = `${obj2.left}px`;
+                clearTimeout(appleTransition);
+                apple.classList.add("hide");
+                apple.classList.remove("transition");
+                setTimeout(spawnEnemy, 10000);
+                gaming = false;
+            }
+            setTimeout(collisionDetection, 10)
+        })();
+        spawnEnemy();
+    </script>
+</body>
+
+</html>

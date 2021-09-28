@@ -49,7 +49,7 @@ function spawnEnemy() {
         setTimeout(spawnEnemy, 10000);
         gaming = false;
     }
-    setTimeout(collisionDetection, 10)
+    setTimeout(collisionDetection, 1)
 })();
 spawnEnemy();
 

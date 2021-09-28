@@ -1,0 +1,80 @@
+*, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-color: rgb(39, 39, 39);
+}
+
+.position-absolute {
+    position: absolute;
+}
+
+.transition {
+    transition: all 4s linear;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.player {
+    height: 30px;
+    width: 10px;
+    background-color: blueviolet;
+}
+
+.arrow {
+    height: 2px;
+    width: 10px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: chartreuse;
+}
+
+.apple {
+    right: 0;
+    width: 50px;
+    height: 50px;
+    background-image: url(apple.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.explosion {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    pointer-events: none;
+}
+
+.explosion .particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pop 1s reverse forwards;
+}
+
+@keyframes pop {
+    from {
+        opacity: 0;
+    }
+    to {
+        top: 50%;
+        left: 50%;
+        opacity: 1;
+    }
+}

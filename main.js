@@ -29,7 +29,7 @@ function spawnEnemy() {
     apple.classList.remove("hide");
     apple.style.top = `${Math.random() * (pageY - apple.offsetHeight) | 0}px`;
     apple.style.right = `${Math.random() * (pageX / 4) | 0}px`;
-    appleTransition = setTimeout(spawnEnemy, 2000);
+    appleTransition = setTimeout(() => spawnEnemy(), 2000);
 }
 
 (function collisionDetection() {
@@ -46,15 +46,14 @@ function spawnEnemy() {
         clearTimeout(appleTransition);
         apple.classList.add("hide");
         apple.classList.remove("transition");
-        setTimeout(spawnEnemy, 10000);
+        setTimeout(() => spawnEnemy(), 10000);
         gaming = false;
     }
-    setTimeout(collisionDetection, 1)
+    setTimeout(() => collisionDetection(), 10);
 })();
 spawnEnemy();
 
 // explosion from https://codepen.io/alek/pen/EyyLgp
-
 // click event listener
 $('body').on('click', function (e) {
     const posY = (e.pageY / (pageY / 100));

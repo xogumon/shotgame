@@ -3,21 +3,21 @@ pageY = window.innerHeight;
 pageX = window.innerWidth;
 const score = document.querySelector(".score");
 const player = document.querySelector(".player");
-const arrow = document.querySelector(".arrow");
+const laser = document.querySelector(".laser");
 const apple = document.querySelector(".apple");
 
 function shot(position) {
     if (inAction || !gaming) return;
     inAction = true;
     player.style.top = `${((pageY - player.offsetHeight) / 100) * position}px`;
-    arrow.classList.add("transition");
-    arrow.style.transitionDuration = "1s";
-    arrow.style.left = `${pageX}px`;
-    arrow.ontransitionend = () => {
-        arrow.classList.remove("transition");
-        arrow.style.transitionDuration = "0ms";
+    laser.classList.add("transition");
+    laser.style.transitionDuration = "1s";
+    laser.style.left = `${pageX}px`;
+    laser.ontransitionend = () => {
+        laser.classList.remove("transition");
+        laser.style.transitionDuration = "0ms";
         setTimeout(() => {
-            arrow.style.left = "0px";
+            laser.style.left = "0px";
             inAction = false;
         }, 1000);
     };
@@ -33,7 +33,7 @@ function spawnEnemy() {
 }
 
 (function collisionDetection() {
-    let obj1 = arrow.getBoundingClientRect();
+    let obj1 = laser.getBoundingClientRect();
     let obj2 = apple.getBoundingClientRect();
     if (obj1.left < obj2.left + obj2.width && obj1.left + obj1.width > obj2.left &&
         obj1.top < obj2.top + obj2.height && obj1.top + obj1.height > obj2.top) {
@@ -49,7 +49,7 @@ function spawnEnemy() {
         setTimeout(() => spawnEnemy(), 10000);
         gaming = false;
     }
-    setTimeout(() => collisionDetection(), 10);
+    setTimeout(() => collisionDetection(), 2);
 })();
 spawnEnemy();
 

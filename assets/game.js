@@ -1,10 +1,15 @@
 let pageX = $(window).width(),
     pageY = $(window).height(),
-    enemy = $('<div class="enemy"></div>'),
+    enemy,
+    enemyEl = $('<div class="enemy"></div>'),
     enemyTimeout,
+    enemyRespawn = 4000,
+    enemyMovement = 4000,
     score = $(".score"),
     player = $(".player"),
+    playerMovement = 100,
     laser = $(".laser"),
+    laserVelocity = 700,
     inAction = false,
     scoreGame = 0;
 
@@ -18,25 +23,28 @@ function laserShot(position = 50) {
 
     player.animate({
         top: `${((pageY - player.outerHeight(true)) / 100) * position}px`
-    }, 100, function () {
+    }, playerMovement, function () {
         laser.animate({
             left: `${pageX}px`
-        }, 1000, function () {
-            laser.css("left", 0);
+        }, laserVelocity, function () {
+            laser.removeAttr("style");
             inAction = false;
         });
     });
 }
 
 function enemyShow() {
+    let topPos = () => rand(0, pageY - enemy.outerHeight(true));
+    enemy = enemyEl.clone();
+    enemy.css("top", `${topPos()}px`);
     $('body').append(enemy);
     (function enemyAnimate() {
         enemy.animate({
             opacity: 1,
-            top: `${Math.random() * (pageY - enemy.outerHeight(true)) | 0}px`,
-            right: `${Math.random() * (pageX / 4) | 0}px`
-        }, 2000);
-        enemyTimeout = setTimeout(() => enemyAnimate(), 2000);
+            top: `${topPos()}px`,
+            right: `${rand(0, pageX / 4)}px`
+        }, enemyMovement);
+        enemyTimeout = setTimeout(() => enemyAnimate(), enemyMovement * 0.2);
     })();
 }
 enemyShow();
@@ -62,9 +70,9 @@ enemyShow();
         scoreGame++;
         score.text(scoreGame);
         explode(enemy.offset().left + (enemy.outerWidth(true) / 2), enemy.offset().top + (enemy.outerHeight(true) / 2));
-        clearTimeout(enemyTimeout);
         enemy.remove();
-        setTimeout(() => enemyShow(), 5000);
+        clearTimeout(enemyTimeout);
+        setTimeout(() => enemyShow(), enemyRespawn);
     }
     setTimeout(() => collisionDetection(), 10);
 })();

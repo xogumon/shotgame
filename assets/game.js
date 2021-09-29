@@ -8,15 +8,18 @@ let pageX = $(window).width(),
     inAction = false,
     scoreGame = 0;
 
-function laserShot(position) {
+function laserShot(position = 50) {
     if (inAction) return;
+
     inAction = true;
+
+    if (position < 0) position = 0;
+    if (position > 100) position = 100;
+
     player.animate({
-        opacity: 1,
         top: `${((pageY - player.outerHeight(true)) / 100) * position}px`
     }, 100, function () {
         laser.animate({
-            opacity: 1,
             left: `${pageX}px`
         }, 1000, function () {
             laser.css("left", 0);
@@ -105,3 +108,22 @@ $('body').on('click', function (e) {
 $(window).resize(function () {
     location.reload(true)
 });
+
+if (location && location.hash.length) {
+    // twitch chat commands support
+    const client = new tmi.Client({
+        options: { debug: true },
+        channels: [location.hash]
+    });
+    client.connect().catch(console.error);
+    client.on('message', (channel, tags, message, self) => {
+        if (self) return;
+        if (message.toLowerCase().startsWith('atirar')) {
+            let args = message.split(" ");
+            if (args && args[1]) {
+                let position = parseInt(args[1]);
+                laserShot(position)
+            }
+        }
+    });
+}
